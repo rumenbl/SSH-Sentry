@@ -1,2 +1,4 @@
 sshd:
   log-file-path: /var/log/auth.log
+discord:
+  webhook-url: https://discord.com/api/webhooks/xxxxx/xxxxxx
