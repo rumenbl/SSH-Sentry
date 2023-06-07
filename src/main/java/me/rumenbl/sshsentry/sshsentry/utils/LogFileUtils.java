@@ -35,18 +35,12 @@ public class LogFileUtils {
                 .serverIP(serverIP).build();
     }
 
+    @SneakyThrows
     private static String pubIP(){
         String urlString = "https://checkip.amazonaws.com/";
-        URL url = null;
-        try {
-            url = new URL(urlString);
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
+        URL url = new URL(urlString);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
             return br.readLine();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
         }
     }
 }
