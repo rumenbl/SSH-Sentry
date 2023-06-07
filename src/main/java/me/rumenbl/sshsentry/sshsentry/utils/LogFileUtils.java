@@ -1,6 +1,5 @@
 package me.rumenbl.sshsentry.sshsentry.utils;
 
-import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import me.rumenbl.sshsentry.sshsentry.ssh.models.SSHLogEntry;
 import org.springframework.stereotype.Component;
@@ -16,7 +15,6 @@ public class LogFileUtils {
     private LogFileUtils() {
     }
 
-    @SneakyThrows
     public static SSHLogEntry parseSSHLogEntryFromString(final String str) {
         final String[] arr = str.split(" ");
         final String username = arr[9];
@@ -32,12 +30,17 @@ public class LogFileUtils {
                 .serverIP(serverIP).build();
     }
 
-    @SneakyThrows
     private static String pubIP() {
         String urlString = "https://checkip.amazonaws.com/";
-        URL url = new URL(urlString);
+        URL url = null;
+        try {
+            url = new URL(urlString);
+        } catch (Exception ignored) {
+        }
         try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
             return br.readLine();
+        } catch (Exception ignored) {
         }
+        return "";
     }
 }
