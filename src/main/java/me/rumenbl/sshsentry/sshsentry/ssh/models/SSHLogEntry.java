@@ -8,7 +8,6 @@ import java.time.LocalDateTime;
 @Data
 @RequiredArgsConstructor
 public class SSHLogEntry {
-    private boolean isAccepted;
     private String originIP;
     private LocalDateTime timeOfEvent;
     private String serverHostName;
