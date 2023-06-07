@@ -6,10 +6,7 @@ import me.rumenbl.sshsentry.sshsentry.ssh.models.SSHLogEntry;
 import org.springframework.stereotype.Component;
 
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.net.InetAddress;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.time.LocalDateTime;
 
@@ -36,7 +33,7 @@ public class LogFileUtils {
     }
 
     @SneakyThrows
-    private static String pubIP(){
+    private static String pubIP() {
         String urlString = "https://checkip.amazonaws.com/";
         URL url = new URL(urlString);
         try (BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
