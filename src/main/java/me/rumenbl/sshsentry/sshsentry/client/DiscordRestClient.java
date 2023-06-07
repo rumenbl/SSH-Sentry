@@ -1,7 +1,5 @@
 package me.rumenbl.sshsentry.sshsentry.client;
 
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 import me.rumenbl.sshsentry.sshsentry.ssh.models.SSHLogEntry;
 import me.rumenbl.sshsentry.sshsentry.utils.ResourceUtil;
 import org.springframework.beans.factory.annotation.Value;
