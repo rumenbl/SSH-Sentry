@@ -1,0 +1,26 @@
+{
+  "content": "",
+  "tts": false,
+  "embeds": [
+    {
+      "type": "rich",
+      "title": "New SSH Login on <SERVER_NAME> (<SERVER_IP>)",
+      "description": "",
+      "color": 38298,
+      "fields": [
+        {
+          "name": "Origin IP",
+          "value": "<ORIGIN_IP>"
+        },
+        {
+          "name": "Username",
+          "value": "<USERNAME>"
+        },
+        {
+          "name": "Time of event",
+          "value": "<TIME_OF_EVENT>"
+        }
+      ]
+    }
+  ]
+}
