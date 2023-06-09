@@ -1,6 +1,7 @@
 package me.rumenbl.sshsentry.sshsentry.ssh;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import me.rumenbl.sshsentry.sshsentry.client.DiscordRestClient;
 import me.rumenbl.sshsentry.sshsentry.utils.LogFileUtils;
 import org.apache.commons.io.input.Tailer;
@@ -20,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class SSHService implements ApplicationRunner {
     private final DiscordRestClient discordRestClient;
     @Value("${sshd.log-file-path}")
@@ -49,7 +51,10 @@ public class SSHService implements ApplicationRunner {
             }
         };
 
-        Tailer tailer = Tailer.create(file, listener);
+        Tailer tailer = Tailer.builder()
+                .setFile(file)
+                .setTailerListener(listener)
+                .get();
         executor.schedule(tailer, 0, TimeUnit.MILLISECONDS);
     }
 
@@ -62,7 +67,7 @@ public class SSHService implements ApplicationRunner {
             }
 
         } catch (Exception e) {
-            System.out.println(e.getMessage());
+            log.error(e.getMessage());
         }
         return lastLine;
     }
