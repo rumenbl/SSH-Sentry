@@ -24,9 +24,7 @@ public class SSHService implements ApplicationRunner {
     private final DiscordRestClient discordRestClient;
     @Value("${sshd.log-file-path}")
     private String sshdLogPath;
-    private ScheduledExecutorService executor;
-    private Tailer tailer;
-    private boolean loopedOver = false;
+    private boolean loopedOver = false; // this is in place to prevent sending out logins which were made before the program ran.
 
     @Override
     public void run(ApplicationArguments args) {
@@ -37,7 +35,7 @@ public class SSHService implements ApplicationRunner {
         final String lastLineOfFile = getLastLineOfFile(file);
 
 
-        executor = Executors.newSingleThreadScheduledExecutor();
+        ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         TailerListener listener = new TailerListenerAdapter() {
             @Override
             public void handle(String line) {
@@ -46,13 +44,12 @@ public class SSHService implements ApplicationRunner {
                 }
 
                 if (loopedOver && line.contains("Accepted")) {
-                    System.out.println(line);
                     discordRestClient.notifyForSSHLogin(LogFileUtils.parseSSHLogEntryFromString(line));
                 }
             }
         };
 
-        tailer = Tailer.create(file, listener);
+        Tailer tailer = Tailer.create(file, listener);
         executor.schedule(tailer, 0, TimeUnit.MILLISECONDS);
     }
 
