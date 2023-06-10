@@ -33,7 +33,7 @@ public class LogFileUtils {
     }
 
     private static String pubIP() {
-        URL url = null;
+        URL url;
         try {
             url = new URL("https://checkip.amazonaws.com/");
         } catch (MalformedURLException e) {
