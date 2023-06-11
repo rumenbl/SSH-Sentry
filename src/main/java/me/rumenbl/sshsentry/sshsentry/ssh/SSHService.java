@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.io.IOException;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -22,20 +23,14 @@ import java.util.concurrent.TimeUnit;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-public class SSHService implements ApplicationRunner {
+public class SSHService {
     private final DiscordRestClient discordRestClient;
     @Value("${sshd.log-file-path}")
     private String sshdLogPath;
     private boolean loopedOver = false; // this is in place to prevent sending out logins which were made before the program ran.
-
-    @Override
-    public void run(ApplicationArguments args) {
-
-
+    public void run() {
         File file = new File(sshdLogPath);
-
         final String lastLineOfFile = getLastLineOfFile(file);
-
 
         ScheduledExecutorService executor = Executors.newSingleThreadScheduledExecutor();
         TailerListener listener = new TailerListenerAdapter() {
@@ -44,9 +39,10 @@ public class SSHService implements ApplicationRunner {
                 if (line.equals(lastLineOfFile)) {
                     loopedOver = true;
                 }
+                if (!loopedOver) return;
 
-                if (loopedOver && line.contains("Accepted")) {
-                    discordRestClient.notifyForSSHLogin(LogFileUtils.parseSSHLogEntryFromString(line));
+                if (line.contains("Accepted")) {
+                    discordRestClient.notifyForAcceptedSSHLogin(LogFileUtils.parseSSHLogEntryFromString(line));
                 }
             }
         };
